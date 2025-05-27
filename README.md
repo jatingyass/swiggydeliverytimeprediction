@@ -1,82 +1,107 @@
-# Swiggy Food Delivery Time Prediction App
+# 🍽️ Swiggy Delivery Time Prediction API
 
-This repository contains a FastAPI application for predicting food delivery times based on various features such as delivery person information, weather conditions, traffic, and other relevant factors. The application uses a pre-trained machine learning model registered in MLflow and a preprocessing pipeline.
+**FastAPI + MLflow + DagsHub powered application to predict food delivery times based on real-world features.**
 
-## Features
-- **FastAPI Framework**: Provides RESTful API endpoints for interaction.
-- **MLflow Integration**: Uses MLflow for model management and tracking.
-- **DagsHub Integration**: Tracks and retrieves model details from DagsHub.
-- **Preprocessing Pipeline**: Data cleaning and preprocessing steps included.
-- **Prediction Endpoint**: Allows users to input data and get predictions.
+[![FastAPI](https://img.shields.io/badge/FastAPI-2023-green?style=flat-square\&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![MLflow](https://img.shields.io/badge/MLflow-Tracking-blue?style=flat-square\&logo=mlflow)](https://mlflow.org/)
+[![DagsHub](https://img.shields.io/badge/DagsHub-Integration-orange?style=flat-square\&logo=dagshub)](https://dagshub.com/)
 
 ---
 
-## Project Structure
+## 🚀 Overview
+
+This repository hosts a FastAPI-based machine learning inference system that predicts delivery times for Swiggy orders. The model uses data such as weather, traffic, delivery person info, and more.
+
+### ✨ Features
+
+* 🔥 **FastAPI Framework**: Interactive REST API documentation via Swagger UI.
+* 📦 **MLflow Integration**: Track and retrieve models through MLflow and DagsHub.
+* 🧹 **Preprocessing Pipeline**: Clean and transform inputs before prediction.
+* 📊 **Live Prediction Endpoint**: `/predict` endpoint accepts user data and returns delivery time.
+* ☁️ **Docker-Ready**: Easily containerizable for deployment on any cloud platform.
+
+---
+
+## 📁 Project Structure
+
 ```plaintext
 .
-├── app.py                  # Main FastAPI application code
-├── run_information.json    # JSON file containing model metadata
+├── app.py                    # Main FastAPI app
+├── run_information.json      # Model metadata info
 ├── models/
-│   └── preprocessor.joblib # Preprocessing pipeline file
+│   └── preprocessor.joblib   # Preprocessing pipeline
 ├── scripts/
-│   └── data_clean_utils.py # Utility functions for data cleaning
-├── requirements.txt        # Python dependencies
-└── README.md               # Project documentation
+│   └── data_clean_utils.py   # Data cleaning utilities
+├── requirements.txt          # Required Python packages
+└── README.md                 # Project documentation
 ```
 
 ---
 
-## Getting Started
+## ⚙️ Getting Started
 
-### Prerequisites
-1. Python 3.8 or higher
-2. Dependencies listed in `requirements.txt`
-3. Access to DagsHub repository for MLflow tracking
+### ✅ Prerequisites
 
-### Installation
+* Python 3.8 or above
+* Access to your DagsHub + MLflow repository
 
-1. Clone this repository:
-    ```bash
-    git clone https://github.com/<your_username>/swiggy-delivery-time-prediction.git
-    cd swiggy-delivery-time-prediction
-    ```
+### 📥 Installation
 
-2. Create and activate a virtual environment:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    ```
+1. **Clone the repository**
 
-3. Install the required dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+   ```bash
+   git clone https://github.com/jatingyass/swiggydeliverytimeprediction.git
+   cd swiggydeliverytimeprediction
+   ```
 
-4. Set up the MLflow tracking URI (update in `app.py` if needed):
-    ```python
-    mlflow.set_tracking_uri("https://dagshub.com/<repo_owner>/<repo_name>.mlflow")
-    ```
+2. **Create a virtual environment**
 
----
+   ```bash
+   python -m venv venv
+   source venv/bin/activate     # On Windows: venv\Scripts\activate
+   ```
 
-## Usage
+3. **Install dependencies**
 
-1. Start the FastAPI application:
-    ```bash
-    uvicorn app:app --host 0.0.0.0 --port 8000
-    ```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-2. Navigate to the API documentation:
-    - Open your browser and visit: `http://localhost:8000/docs`
-    
-3. Make predictions using the `/predict` endpoint:
-    - Provide input data in the required JSON format.
-    - Receive the predicted delivery time as the response.
+4. **Configure MLflow + DagsHub in `app.py`**
+
+   ```python
+   from dagshub import dagshub
+   import mlflow
+
+   dagshub.init(repo_owner='jatingyass',
+                repo_name='swiggydeliverytimeprediction',
+                mlflow=True)
+
+   mlflow.set_tracking_uri("https://dagshub.com/jatingyass/swiggydeliverytimeprediction.mlflow")
+   ```
 
 ---
 
-## Input Data Format
-The `/predict` endpoint expects input in the following JSON format:
+## ▶️ Running the App
+
+Start the FastAPI server using Uvicorn:
+
+```bash
+uvicorn app:app --host 0.0.0.0 --port 8000
+```
+
+Visit the interactive API docs at:
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+## 📬 Prediction Endpoint
+
+Send a POST request to `/predict` with the following JSON format:
+
 ```json
 {
   "ID": "12345",
@@ -101,43 +126,35 @@ The `/predict` endpoint expects input in the following JSON format:
 }
 ```
 
----
-
-## Key Components
-
-### 1. **Data Preprocessing**
-Data is cleaned and transformed using a preprocessing pipeline stored in `models/preprocessor.joblib`.
-
-### 2. **Model Retrieval**
-The application retrieves the latest production-ready model using MLflow and DagsHub integration.
-
-### 3. **Endpoints**
-- **Home Endpoint (`/`)**: Returns a welcome message.
-- **Predict Endpoint (`/predict`)**: Accepts input data and returns delivery time predictions.
+The response will include the predicted delivery time in minutes.
 
 ---
 
-## Configuration
-### DagsHub Integration
-- Initialize DagsHub in `app.py`:
-    ```python
-    dagshub.init(repo_owner='msa23003',
-                 repo_name='swiggy-delivery-time-prediction',
-                 mlflow=True)
-    ```
+## 🧠 Key Components
 
-### MLflow Configuration
-- Set the MLflow tracking URI:
-    ```python
-    mlflow.set_tracking_uri("https://dagshub.com/<repo_owner>/<repo_name>.mlflow")
-    ```
+### 1. Preprocessing
+
+Input data is cleaned and processed using a pipeline stored in `models/preprocessor.joblib`.
+
+### 2. MLflow + DagsHub Integration
+
+* Tracks experiments
+* Fetches the latest production-ready model
+* Allows reproducible results
+
+### 3. FastAPI Endpoints
+
+| Endpoint   | Description                      |
+| ---------- | -------------------------------- |
+| `/`        | Welcome route                    |
+| `/predict` | Predicts delivery time from data |
 
 ---
 
-## Deployment
-This application can be deployed using any cloud platform or containerized using Docker.
+## 📦 Docker Deployment
 
-### Example Dockerfile
+### Example `Dockerfile`
+
 ```dockerfile
 FROM python:3.8-slim
 
@@ -145,21 +162,33 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
+Then build and run:
+
+```bash
+docker build -t swiggy-predictor .
+docker run -p 8000:8000 swiggy-predictor
+```
+
+
 ---
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+## 🙏 Acknowledgements
+
+* [FastAPI Docs](https://fastapi.tiangolo.com/)
+* [MLflow Docs](https://www.mlflow.org/)
+* [DagsHub Docs](https://dagshub.com/docs/)
 
 ---
 
-## Acknowledgments
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [MLflow Documentation](https://www.mlflow.org/docs/latest/index.html)
-- [DagsHub Documentation](https://dagshub.com/docs/)
+## 🛠️ Contributing
 
-Feel free to fork and contribute to this repository!
+Want to improve the project?
+Feel free to fork, open issues, or submit a pull request.
+
+> Made with ❤️ by [Jatin Gyass](https://github.com/jatingyass)
+
